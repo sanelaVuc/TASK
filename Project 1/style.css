@@ -1,0 +1,65 @@
+#map {
+    width: 100%;
+    height: 93vh;
+    }
+    
+
+.navbar-brand {
+    font-size: 30px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: purple;
+      }
+
+
+#exampleModalLabel {
+    font-weight: bold;
+}
+
+.modal-header {
+    background-color: rgb(116, 187, 241);
+}
+
+.weather {
+    background-image: url(./libs/icons/white-cloud-blue-sky.jpg);
+    
+}
+
+
+
+#flag {
+    width: 300px;
+    border: 2px solid black;
+}
+
+#listId {
+    list-style-type: none;
+}
+
+
+#weatherIcon {
+    width: 150px;
+   
+}
+
+.table {
+    font-size: 20px;
+}
+
+#name {
+    font-weight: bold;
+}
+
+.pic {
+    display: flex;
+    margin-left: 30px;
+}
+
+.temp {
+    display: grid;
+    margin-top: 20px;
+}
+
+h1 {
+    font-weight: bold;
+}
+

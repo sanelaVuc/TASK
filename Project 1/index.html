@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gazetteer</title>
+    <link rel="icon" type="image/x-icon" href="./libs/icons/favicon.png">
+    <link rel="stylesheet" href="./leaflet/leaflet.css"/> 
+    <link rel="stylesheet" href="./Bootstrap/bootstrap-5.3.0-alpha1-dist/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="./libs/fontawesome/css/all.css">
+    <link rel="stylesheet" href="./libs/Easy-button/easybuttoncss.css">
+    <link rel="stylesheet" href="./leaflet/MarkerCluster.css">
+    <link rel="stylesheet" href="./leaflet/MarkerCluster.Default.css">
+
+
+    <link rel="stylesheet" href="./style.css"> 
+</head>
+
+<body>
+  <!-- NavBar -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Gazetteer</a>
+                
+                <div class="col-auto">
+                    <select class="form-select"  name="selectCountry" id="selectCountry" aria-label="Select Country">
+                     </select>     
+                </div> 
+            </div>        
+  </nav>
+
+
+  <!-- Map -->
+  <div id="map"></div> 
+
+   <!-- Button Country Info modal -->
+  <div class="modal fade" id="countryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="col-11 modal-title text-center" id="exampleModalLabel">Country Information</h1>
+          <button type="button" class="btn-close float-md-end p-1" data-bs-dismiss="modal" aria-label="Close" style=""></button>
+        </div>
+        <div class="modal-body">
+            <table id="selectCountry" class="table">
+          
+                <tbody>
+                  <tr>
+                    <th scope="row">
+                      <i class="fa-solid fa-city"></i>
+                      <b>Capital:</b></th>
+                    <td id="txtCapital"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">
+                      <i class="fa-solid fa-language"></i>
+                      <b>Language(s):</b></th>
+                    <td id="txtLanguages">
+                      <ul>
+                        <li id="listId"></li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><b>Area:</b></th>
+                    <td id="txtArea"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><b>Population:</b></th>
+                    <td id="txtPopulation"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><b>Continent:</b></th>
+                    <td id="txtContinent"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><b>Currency:</b></th>
+                    <td id="txtCurrency"></td>
+                  </tr>
+                  
+                </tbody>
+              </table>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+ 
+
+  <!-- Flag Country Modal -->
+  <div class="modal fade" id="flagModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="col-11 modal-title text-center" id="exampleModalLabel">Flag</h1>
+          <button type="button" class="btn-close float-md-end p-1" data-bs-dismiss="modal" aria-label="Close" style=""></button>
+        </div>
+        <div class="modal-body">
+            <img src="" class="img-responsive center-block d-block mx-auto" id="flag">
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+
+  
+ <!-- Time Zone Modal -->
+  <div class="modal fade" id="timeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header ">
+          <h1 class="col-11 modal-title text-center" id="exampleModalLabel">Time Zone</h1>
+          <button type="button" class="btn-close float-md-end p-1" data-bs-dismiss="modal" aria-label="Close" style=""></button>
+        </div>
+        <div class="modal-body">
+          
+          <table class="table">
+            <tbody>
+              <tr>
+                <th scope="row">
+                  <i class="fa-solid fa-calendar-days"></i>
+                  <b>Date: </b>
+                </th>
+                <td id="timezone"></td>
+              </tr>
+              <tr>
+                <th scope="row"><i class="fa-regular fa-clock"></i>
+                  <b>Time: </b>
+                </th>
+                <td id="time"></td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <i class="fa-solid fa-sun"></i>
+                  <b>Sunrise:  </b>
+                </th>
+                <td id="sunrise"></td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <i class="fa-solid fa-moon"></i>
+                  <b>Sunset: </b>
+                </th>
+                <td id="sunset"></td>
+              </tr>
+          
+            </tbody>
+
+          </table>
+
+
+
+
+        </div>
+       
+      </div>
+    </div>
+  </div>
+  
+
+
+
+<!-- Weather Modal -->
+  <div class="modal fade" id="weatherModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+       
+        <div class="modal-body weather">
+          
+          <button type="button" class="btn-close float-md-end p-1" data-bs-dismiss="modal" aria-label="Close"     style=""></button>
+          <h1 class="col-11 modal-title text-center" id="name"></h1>
+          <div class="pic">
+            <img src="" id="weatherIcon">
+            <div class="temp">
+              <h4 id="description"></h4>
+              <h1 id="temperature"></h1>
+              
+            </div>
+          
+          </div>
+
+
+            <table class="table">
+              <tbody>
+                <th scope="row">
+                  <i class="fa-solid fa-temperature-high"></i>
+                  <b>Feels like:</b></th>
+                <td id="feelsLike"></td>
+              </tr> 
+              <tr>
+                <th scope="row">
+                  <i class="fa-solid fa-temperature-arrow-down"></i>
+                  <b>Minim Temperature:</b></th>
+                <td id="tempMin"> </td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <i class="fa-solid fa-temperature-arrow-up"></i>
+                  <b>Maxim Temperature:</b></th>
+                <td id="tempMax"></td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <i class="fa-solid fa-wind"></i>
+                  <b>Wind Speed:</b></th>
+                <td id="wind"></td>
+              </tr>
+              <th scope="row">
+                <b>Humidity:</b></th>
+              <td id="humidity"></td>
+            </tr>
+             
+            </tbody>
+          </table>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+<!-- Population Modal -->
+<div class="modal fade" id="populationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="col-11 modal-title text-center" id="exampleModalLabel">Population</h1>
+        <button type="button" class="btn-close float-md-end p-1" data-bs-dismiss="modal" aria-label="Close" style=""></button>
+      </div>
+      <div class="modal-body">
+        <table id="selectCountry" class="table">
+          
+          <tbody>
+            <tr>
+              <th scope="row"><b>1970 Population:</b></th>
+              <td id="pop1970"></td>
+            </tr>
+            <tr>
+              <th scope="row"><b>1980 Population:</b></th>
+              <td id="pop1980">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><b>1990 Population:</b></th>
+              <td id="pop1990"></td>
+            </tr>
+            <tr>
+              <th scope="row"><b>2000 Population:</b></th>
+              <td id="pop2000"></td>
+            </tr>
+            <tr>
+              <th scope="row"><b>2010 Population:</b></th>
+              <td id="pop2010"></td>
+            </tr>
+            <tr>
+              <th scope="row"><b>2015 Population:</b></th>
+              <td id="pop2015"></td>
+            </tr>
+            <tr>
+              <th scope="row"><b>2020 Population:</b></th>
+              <td id="pop2020"></td>
+            </tr>
+            <tr>
+              <th scope="row"><b>2022 Population:</b></th>
+              <td id="pop2022"></td>
+            </tr>
+            <tr>
+              <th scope="row"><b>Growth Rate:</b></th>
+              <td id="growth"></td>
+            </tr>
+            <tr>
+              <th scope="row"><b>World Population Percentage:</b></th>
+              <td id="percentage"></td>
+            </tr>
+
+
+          </tbody>
+        </table>
+      </div>
+     
+    </div>
+  </div>
+</div>
+
+<!-- Wikipedia Modal -->
+<div class="modal fade" id="wikipediaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="col-11 modal-title text-center" id="exampleModalLabel">Wikipedia</h1>
+        <button type="button" class="btn-close float-md-end p-1" data-bs-dismiss="modal" aria-label="Close" style=""></button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          
+          <tbody>
+            
+            <tr>
+              <th scope="row">Summary</th>
+            </tr>
+            <tr>
+              <th scope="row"></th>
+              <td id="summary"></td>
+            </tr>
+            <tr>
+              <th scope="row"></th>
+              <td>
+                <a id="wikiLink">Read More</a>
+              </td>
+              
+            </tr>
+            
+            
+
+
+          </tbody>
+        </table>
+      </div>
+     
+    </div>
+  </div>
+</div>
+   
+    
+    <script type="text/javascript" src="./libs/fontawesome/js/all.min.js"></script>
+    <script type="text/javascript" src="./js/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="./Bootstrap/bootstrap-5.3.0-alpha1-dist/js/bootstrap.min.js"></script> 
+    <script type="text/javascript" src="./leaflet/leaflet.js"></script> 
+    <script type="text/javascript" src="./leaflet/leaflet.markercluster-src.js"></script>
+    <script type="text/javascript" src="./libs/Easy-button/easybutton.js"></script>
+    <script type="text/javascript" src="./js/script.js"></script>
+    
+</body>
+</html>
