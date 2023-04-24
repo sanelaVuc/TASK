@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gazeteer</title>
+    <link rel="stylesheet" href="./leaflet/leaflet.css"/> 
+    <link rel="stylesheet" href="./Bootstrap/bootstrap-5.3.0-alpha1-dist/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="./libs/fontawesome/css/all.css">
+    <link rel="stylesheet" href="./libs/Easy-button/easybuttoncss.css">
+    
+    <link rel="stylesheet" href="./style.css"> 
+</head>
+
+<body>
+  <!-- NavBar -->
+   <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Gazetteer</a>
+                <div class="col-auto">
+                    <select class="form-control" name="selectCountry" id="selectCountry" aria-label="Select Country">
+                     </select>     
+                </div> 
+            </div>        
+    </nav>
+
+
+    <!-- Map -->
+    <div id="map"></div> 
+
+   <!-- Button Country Info modal -->
+ 
+  <div class="modal fade" id="countryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Country Information</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <table id="selectCountry" class="table">
+          
+                <tbody>
+                  <tr>
+                    <th scope="row">Capital:</th>
+                    <td id="txtCapital"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Language(s):</th>
+                    <td id="txtLanguages"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Area:</th>
+                    <td id="txtArea"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Population:</th>
+                    <td id="txtPopulation"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Continent:</th>
+                    <td id="txtContinent"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Currency:</th>
+                    <td id="txtCurrency"></td>
+                  </tr>
+                  
+                </tbody>
+              </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+
+  <!-- Flag Country Modal -->
+  <div class="modal fade" id="flagModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Flag</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="selectCountry">
+            <p id="flag"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  
+ <!-- Weather Modal -->
+  <div class="modal fade" id="weatherModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Weather</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+
+
+   
+    
+    <script type="text/javascript" src="./libs/fontawesome/js/all.min.js"></script>
+    <script type="text/javascript" src="./js/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="./Bootstrap/bootstrap-5.3.0-alpha1-dist/js/bootstrap.min.js"></script> 
+    <script type="text/javascript" src="./leaflet/leaflet.js"></script> 
+    <script type="text/javascript" src="./libs/Easy-button/easybutton.js"></script>
+    <script type="text/javascript" src="./js/script.js"></script>
+    
+</body>
+</html>
