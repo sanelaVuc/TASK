@@ -1,43 +1,56 @@
-var earthquakesMarkers = L.markerClusterGroup();
-var citiesMarkers = L.markerClusterGroup();
-var airportsMarkers = L.markerClusterGroup();
-
+var earthquakesMarkers = L.markerClusterGroup({
+    polygonOptions: {
+        fillColor: 'green',
+        color: 'black',
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 0.5
+}});
+var citiesMarkers = L.markerClusterGroup({
+    polygonOptions: {
+        fillColor: 'green',
+        color: 'black',
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 0.5
+}});
+var airportsMarkers = L.markerClusterGroup({
+    polygonOptions: {
+        fillColor: 'green',
+        color: 'black',
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 0.5
+}});
 
 // Setup map
-var map = L.map('map').setView([51.505, -0.09], 13);
 
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
-
-map.locate({setView: true, maxZoom: 16});
-
-// User actual location
-function onLocationFound(e) {
-    var radius = e.accuracy;
-
-    var locationIcon = L.icon({
-        iconUrl: 'libs/icons/location.png',
-        iconSize: [40, 50],
-        
+var streets = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     });
 
-    L.marker(e.latlng, {icon: locationIcon}) .addTo(map)
-        .bindPopup("You are within " + radius + " meters from this point").openPopup();
+var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+});
 
-    L.circle(e.latlng, radius).addTo(map);
+var basemaps = {
+        "Streets": streets,
+        "Satellite": satellite
+      };
 
-    
-}
+var map = L.map('map',{
+    layers: [streets]
+}).setView([54.5, -4], 6);
 
-map.on('locationfound', onLocationFound);
+var overlays = {
+    "Airports": airportsMarkers,
+    "Cities": citiesMarkers,
+    "Eartquakes": earthquakesMarkers
+  };
 
-function onLocationError(e) {
-    alert(e.message);
-}
+var layerControl = L.control.layers(basemaps, overlays).addTo(map);
 
-map.on('locationerror', onLocationError);
 
 
 $.ajax({
@@ -61,12 +74,9 @@ $(document).ready(function() {
     navigator.geolocation.getCurrentPosition(geolocationCallback,  errorLocationCallback);  
 })
     
-     
-
-
+  
 function errorLocationCallback(){
  
-
     var position = {
             coords:{
             latitude: "51.52255",
@@ -79,11 +89,12 @@ function errorLocationCallback(){
 }
 
 function geolocationCallback( position ){
+    $(".loader").fadeOut("slow");
     var lat = position.coords.latitude;
     var lng = position.coords.longitude;
     var latlng = new L.LatLng(lat, lng);
 
-    map = map.setView(latlng, 8);
+    map = map.setView(latlng, 4);
 
     $.ajax({
         url: "php/userLocation.php",
@@ -97,6 +108,9 @@ function geolocationCallback( position ){
             const $select = document.querySelector('#selectCountry');
             $select.value = resultUser['data']['geonames'];
             $($select).trigger("change");
+
+ 
+
         },
 
         error: function(jqXHR, exception){
@@ -131,9 +145,9 @@ $("#selectCountry").change(function(){
         
     },
     complete: function(){
+      
         
-        
-        // Country Information
+//------- Country Information
         $.ajax({
             url: "php/countryInfo.php",
             type: 'GET',
@@ -143,30 +157,46 @@ $("#selectCountry").change(function(){
             },
             success: function(resultInfo) {
 
+                
 
-                // Wikipedia Modal
+ //------------- News Modal
                 $.ajax({
-                    url: "php/wikipedia.php",
+                    url: "php/getNews.php",
                     type: 'POST',
                     dataType: 'json',
                     data: {
-                        north: (resultInfo['data']['geonames']['0']['north']),
-                        south: (resultInfo['data']['geonames']['0']['south']),
-                        west: (resultInfo['data']['geonames']['0']['west']),
-                        east: (resultInfo['data']['geonames']['0']['east']),
-            
+                        country: $('#selectCountry').val()
                     },
-                    
-                    success: function(resultWikipedia) {
+                    success: function(resultNews) {
+                        const data = resultNews.data.articles;
 
-                        
-                        
-                        $('#summary').html(resultWikipedia.data.geonames['0']['summary']);
-                        $('#wikiLink').attr('href','https://' + resultWikipedia.data.geonames[0]['wikipediaUrl']);
+                       
+                        if (resultNews.status.name == "ok") {
+                            if (data.length === 0) {
+                                $("#title1").html('').empty();
+                                $("#title1").html('').append('No news available for this country');
+                                $('#Link1').html('').empty('');
+
+                               
+                                $("#title2").html('').empty();
+                                $('#Link2').html('').empty('');
+
+                                $("#title3").html('').empty();
+                                $('#Link3').html('').empty('');
+                              }
+                    
+                            $("#title1").html(data['0'].title);
+                            $('#Link1').attr('href', data['0'].url);
+                            $("#title2").html(data['1'].title);
+                            $('#Link2').attr('href', data['1'].url);
+                            $("#title3").html(data['2'].title);
+                            $('#Link3').attr('href', data['2'].url);
+                        }
                     },
-        
-                    error: function ajaxError(jqXHR) {
-                        console.error('Error: ', jqXHR.responseText);
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(JSON.stringify(jqXHR));
+                        console.log(JSON.stringify(textStatus));
+                        console.log(JSON.stringify(errorThrown));
                     }
                 });
 
@@ -174,11 +204,7 @@ $("#selectCountry").change(function(){
 
 
 
-
-
-
-
-                 // Earthquake Marker
+//-------------- Earthquake Marker
                 map.removeLayer(earthquakesMarkers);
                 earthquakesMarkers.clearLayers();
                 $.ajax({
@@ -195,17 +221,25 @@ $("#selectCountry").change(function(){
                     
                     success: function(resultEarthquakes) {
                        
-                        var earthquakesIcon = L.icon ({
-                            iconUrl: 'libs/icons/earthquake.png',
-                            iconSize: [40, 50],
-        
-                        })
+                        var earthquakesIcon = L.ExtraMarkers.icon({
+                            icon: 'fa-solid fa-house-crack',
+                            iconColor: 'black',
+                            markerColor: 'red',
+                            shape: 'star',
+                            prefix: 'fa'
+                            
+                        });
+
+                        
                         
                         resultEarthquakes['data'].forEach(earthquakes => {
+
+                            var date =  Date.parse(`${earthquakes.datetime}`).toString("ddd, MMM dd, yyyy");
+                            var time =  Date.parse(`${earthquakes.datetime}`).toString("h:mm:ss tt");
+                            earthquakesMarkers.addLayer(L.marker([earthquakes.lat,earthquakes.lng] , {icon: earthquakesIcon}).bindTooltip(date + `<br>` + time + `<br>Magnitude: ${earthquakes.magnitude}`));
                             
-                            earthquakesMarkers.addLayer(L.marker([earthquakes.lat,earthquakes.lng] , {icon: earthquakesIcon}).bindPopup(`<b>Magnitude : </b> ${earthquakes.magnitude}`));
                             map.addLayer(earthquakesMarkers);
-        
+                          
         
                         })
                     },
@@ -217,7 +251,8 @@ $("#selectCountry").change(function(){
 
 
 
-                //Timezone Modal
+
+//--------------Timezone Modal
                 $.ajax({
                     url: "php/getTimeZone.php",
                     type: 'POST',
@@ -254,10 +289,13 @@ $("#selectCountry").change(function(){
                                 sunset=(" " + (sunset-12) + resultTime.data.sunset.slice(13) + " PM") 
                             };
 
-                    
+                            var gmtOffset = resultTime.data.gmtOffset;
+                            if (gmtOffset>=0) {
+                                gmtOffset = "+ " + gmtOffset
+                            };
                             
-                            $('#timezone').html(resultTime.data.time.slice(0,10));
-                            $('#time').html(time);
+                            $('#timezone').text(Date.parse(resultTime.data.time).toString("MMMM dS, yyyy"));
+                            $('#utc').html(gmtOffset);
                             $('#sunrise').html(' ' + sunrise);
                             $('#sunset').html(sunset);
 
@@ -270,6 +308,8 @@ $("#selectCountry").change(function(){
                     }
                 });
 
+              
+// ----------Population Modal
                 $.ajax({
                     url: "php/population.php",
                     type: 'POST',
@@ -281,14 +321,14 @@ $("#selectCountry").change(function(){
                         
                     
                         
-                            $("#pop1970").html(regexNumber(resultPopulation['1970 Population']));
-                            $("#pop1980").html(regexNumber(resultPopulation['1980 Population']));
-                            $("#pop1990").html(regexNumber(resultPopulation['1990 Population']));
-                            $("#pop2000").html(regexNumber(resultPopulation['2000 Population']));
-                            $("#pop2010").html(regexNumber(resultPopulation['2010 Population']));
-                            $("#pop2015").html(regexNumber(resultPopulation['2015 Population']));
-                            $("#pop2020").html(regexNumber(resultPopulation['2020 Population']));
-                            $("#pop2022").html(regexNumber(resultPopulation['2022 Population']));
+                            $("#pop1970").html(numeral(resultPopulation['1970 Population']).format('0,0'));
+                            $("#pop1980").html(numeral(resultPopulation['1980 Population']).format('0,0'));
+                            $("#pop1990").html(numeral(resultPopulation['1990 Population']).format('0,0'));
+                            $("#pop2000").html(numeral(resultPopulation['2000 Population']).format('0,0'));
+                            $("#pop2010").html(numeral(resultPopulation['2010 Population']).format('0,0'));
+                            $("#pop2015").html(numeral(resultPopulation['2015 Population']).format('0,0'));
+                            $("#pop2020").html(numeral(resultPopulation['2020 Population']).format('0,0'));
+                            $("#pop2022").html(numeral(resultPopulation['2022 Population']).format('0,0'));
                             $("#growth").html(resultPopulation['Growth Rate']);
                             $("#percentage").html(resultPopulation['World Population Percentage']);
                         
@@ -306,8 +346,8 @@ $("#selectCountry").change(function(){
                     $('#txtCapital').html(resultInfo['data']['geonames']['0']['capital']);
                     $('#listId').empty()
                     $('#txtLanguages').html(resultInfo['data']['geonames']['0']['languages'].split(',').forEach(language => $('#listId').append('<li>' +language+ '</li>')));
-                    $('#txtArea').html(regexNumber(resultInfo['data']['geonames']['0']['areaInSqKm'] +  " Km&#178;"));
-                    $('#txtPopulation').html(regexNumber(resultInfo['data']['geonames']['0']['population'])); 
+                    $('#txtArea').html(numeral(resultInfo['data']['geonames']['0']['areaInSqKm']).format('0,0') +  " km&#178;"); 
+                    $('#txtPopulation').html(numeral(resultInfo['data']['geonames']['0']['population']).format('0,0')); 
                     $('#txtContinent').html(resultInfo['data']['geonames']['0']['continentName']);
                     $('#txtCurrency').html(resultInfo['data']['geonames']['0']['currencyCode']);
                     
@@ -321,8 +361,9 @@ $("#selectCountry").change(function(){
             }
         });
 
+       
 
-        // Country Flag Modal
+// -----Country Flag 
         $.ajax({
             url: "php/getFlag.php",
             type: 'POST',
@@ -346,17 +387,12 @@ $("#selectCountry").change(function(){
             }
         });
 
-
-        
-
-
-
-
+         
 
         }
     });
      
-    // City Marker
+ //------- City Marker
     $(document).ready(function() {
         $.ajax({
             url: "php/getCities.php",
@@ -364,31 +400,82 @@ $("#selectCountry").change(function(){
             dataType: 'json',
             data: {
                 country: $('#selectCountry').val()
-    
+               
             },
               
             success: function(resultCities) {
                 
                 
                
-                var capitalIcon = L.icon({
-                    iconUrl: 'libs/icons/capital.png',
-                    iconSize: [40, 50],
+                var capitalIcon = L.ExtraMarkers.icon({
+                    icon: ' fa-landmark-flag',
+                    iconColor: 'white',
+                    markerColor: 'red',
+                    shape: 'square',
+                    prefix: 'fa'
                     
                 });
-                var cityIcon = L.icon({
-                    iconUrl: 'libs/icons/city.png',
-                    iconSize: [40, 40],
+                var cityIcon = L.ExtraMarkers.icon({
+                    icon: "fa-regular fa-building",
+                    iconColor: 'white',
+                    markerColor: 'green',
+                    shape: 'circle',
+                    prefix: 'fa'
                 });
                 
                 map.removeLayer(citiesMarkers);
                 citiesMarkers.clearLayers()
-                resultCities.forEach(city => {   
+                resultCities.forEach(city => { 
+                    var cityPop = numeral(`${city.population}`).format('0,0'); 
                     if(city.is_capital){
-                        citiesMarkers.addLayer(L.marker([city.latitude, city.longitude], {icon: capitalIcon}).bindPopup(`<b>Capital : ${city.name}</b><br>
-                        <b>Population</b>: ${city.population}<br>`));
+                        citiesMarkers.addLayer(L.marker([city.latitude, city.longitude], {icon: capitalIcon}).bindTooltip(`${city.name}` + `<br>` + cityPop));
                         
-                        // Weather Modal
+                    
+
+ //--------------Airports Marker
+                 map.removeLayer(airportsMarkers);
+                 airportsMarkers.clearLayers();
+                 $.ajax({
+                     url: "php/getAirports.php",
+                     type: 'POST',
+                     dataType: 'json',
+                     data: {
+                        country: $('#selectCountry').val(),
+                         city: city.name
+                     },
+                     success: function(resultAirports) {
+                       
+                         var airportIcon = L.ExtraMarkers.icon({
+                            icon: "fa-solid fa-plane",
+                            iconColor: 'black',
+                            markerColor: 'blue',
+                            shape: 'penta',
+                            prefix: 'fa'
+                        });
+                         //TODO CHECK IF RESULT IS AN ARRAY, IF NOT, DON'T DISPLAY AIRPORTS AND PRINT ON CLG
+                         //NO AIRPORTS FOUND OR ERROR.
+                         if(Array.isArray(resultAirports)){
+                         resultAirports.forEach(airports => 
+                            
+                        {
+                                         
+                             airportsMarkers.addLayer(L.marker([airports.latitude,airports.longitude] , {icon: airportIcon}).bindTooltip(`${airports.name}`));
+                             map.addLayer(airportsMarkers);
+
+
+                         })}
+                     },
+
+                     error: function(jqXHR, textStatus, errorThrown) {
+                         console.log(JSON.stringify(jqXHR));
+                         console.log(JSON.stringify(textStatus));
+                         console.log(JSON.stringify(errorThrown));
+                         
+                     }
+                 });
+
+                    
+ //-------------------- Weather Modal
                         $.ajax({
                             url: "php/getWeather.php",
                             type: 'POST',
@@ -399,16 +486,51 @@ $("#selectCountry").change(function(){
                             success: function(resultWeather) {
                                
 
-                                    $('#name').html(resultWeather['name']);
-                                    $('#weatherIcon').attr("src", "https://openweathermap.org/img/wn/" + resultWeather['weather'][0]['icon'] + "@2x.png");
-                                    $('#description').html(resultWeather['weather'][0]['description'].toUpperCase());
-                                    $('#temperature').html(Math.round((((resultWeather['main']['temp']-32) *5)/9))+ ' \u00B0C');
-                                    $('#feelsLike').html(Math.round((((resultWeather['main']['feels_like']-32) *5)/9))+ ' \u00B0C');
-                                    $('#tempMin').html(Math.round((((resultWeather['main']['temp_min']-32) *5)/9)) + ' \u00B0C');
-                                    $('#tempMax').html(Math.round((((resultWeather['main']['temp_max']-32) *5)/9))+ ' \u00B0C');
-                                    $('#wind').html(resultWeather['wind']['speed'] + 'mph');
-                                    $('#humidity').html(resultWeather['main']['humidity'] + '%');
+
+                                         // FORECAST + Weather
+                                         $.ajax({
+                                            url: "php/getNewWeather.php",
+                                            type: 'POST',
+                                            dataType: 'json',
+                                            data: {
+                                               
+                                                lat: (resultWeather['coord']['lat']),
+                                               lng: (resultWeather['coord']['lon']),
+                                            },
+                                            success: function(resultNewWeather) {
                                 
+                                                
+                                                $('#name').html(resultWeather['name']);
+                                                $('#weatherIcon').attr("src", resultNewWeather.data.current.condition.icon);
+                                                $('#iconText').html(resultNewWeather.data.current.condition.text);
+                                                $('#maxTemp').html(Math.round(resultNewWeather.data.current.temp_c) + ' \u00B0C');
+                                                $('#minTemp').html(Math.round(resultNewWeather.data.forecast.forecastday['0'].day.mintemp_c) + ' \u00B0C');
+                                                $('#wind').html(resultNewWeather.data.current.wind_mph + ' mph');
+                                                $('#humidity').html(resultNewWeather.data.current.humidity + ' %');
+                                                $('#rain').html(resultNewWeather.data.forecast.forecastday['0'].day.daily_chance_of_rain + ' %');
+                                                $('#day1Date').text(Date.parse(resultNewWeather.data.forecast.forecastday['1'].date).toString("ddd dS"));;
+                                                $('#day1Icon').attr("src", resultNewWeather.data.forecast.forecastday['1'].day.condition.icon);
+                                                $('#day1TempMax').html(Math.round(resultNewWeather.data.forecast.forecastday['1'].day.maxtemp_c) + ' \u00B0C');
+                                                $('#day1TempMin').html(Math.round(resultNewWeather.data.forecast.forecastday['1'].day.mintemp_c) + ' \u00B0C');
+                                                $('#day2Date').text(Date.parse(resultNewWeather.data.forecast.forecastday['2'].date).toString("ddd dS"));;
+                                                $('#day2Icon').attr("src", resultNewWeather.data.forecast.forecastday['2'].day.condition.icon);
+                                                $('#day2TempMax').html(Math.round(resultNewWeather.data.forecast.forecastday['2'].day.maxtemp_c) + ' \u00B0C');
+                                                $('#day2TempMin').html(Math.round(resultNewWeather.data.forecast.forecastday['2'].day.mintemp_c) + ' \u00B0C');
+
+                                                
+                                                
+                                            },
+                                    
+                                            error: function(jqXHR, textStatus, errorThrown) {
+                                                         console.log(JSON.stringify(jqXHR));
+                                                         console.log(JSON.stringify(textStatus));
+                                                         console.log(JSON.stringify(errorThrown));
+                                                         
+                                                     }
+                                        });
+
+
+
                             },
                     
                             error: function(jqXHR, textStatus, errorThrown) {
@@ -418,55 +540,23 @@ $("#selectCountry").change(function(){
                                          
                                      }
                         });
+
+ 
+
                     }else{
-                        citiesMarkers.addLayer(L.marker([city.latitude, city.longitude], {icon: cityIcon}).bindPopup(`<b>City : ${city.name}</b><br>
-                        <b>Population</b>: ${city.population}<br>`));
-                       
+                        citiesMarkers.addLayer(L.marker([city.latitude, city.longitude], {icon: cityIcon}).bindTooltip(`${city.name}` + `<br>` + cityPop));
+
                     }  
                     
-                   //Airports Marker
-                     map.removeLayer(airportsMarkers);
-                     airportsMarkers.clearLayers();
-                     $.ajax({
-                         url: "php/getAirports.php",
-                         type: 'POST',
-                         dataType: 'json',
-                         data: {
-                            country: $('#selectCountry').val(),
-                             city: city.name
-                         },
-                         success: function(resultAirports) {
-                           
-                             var airportIcon = L.icon({
-                                 iconUrl: 'libs/icons/airport.png',
-                                 iconSize: [40, 50],
-                             });
-                             //TODO CHECK IF RESULT IS AN ARRAY, IF NOT, DON'T DISPLAY AIRPORTS AND PRINT ON CLG
-                             //NO AIRPORTS FOUND OR ERROR.
-                             if(Array.isArray(resultAirports))
-                             resultAirports.forEach(airports => {
-                                             
-                                 airportsMarkers.addLayer(L.marker([airports.latitude,airports.longitude] , {icon: airportIcon}).bindPopup(`${airports.name}`));
-                                 map.addLayer(airportsMarkers);
- 
- 
-                             })
-                         },
-
-                         error: function(jqXHR, textStatus, errorThrown) {
-                             console.log(JSON.stringify(jqXHR));
-                             console.log(JSON.stringify(textStatus));
-                             console.log(JSON.stringify(errorThrown));
-                             
-                         }
-                     });
-
+   
 
                 });
 
-                
-                     
+                   
                 map.addLayer(citiesMarkers);
+
+
+          
                 
             },
     
@@ -481,14 +571,6 @@ $("#selectCountry").change(function(){
 });
 
 
-function regexNumber(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-};
-
-function regexTransformDotsToCommas(x){
-    return x.toString().replace(/\./g, ',');
-}
-
 // Country Information Button
 btn = L.easyButton('<i class="fa-solid fa-info"></i>',function(btn,map){
     $('#countryModal').modal('show');
@@ -497,37 +579,22 @@ btn = L.easyButton('<i class="fa-solid fa-info"></i>',function(btn,map){
     btn.button.style.border = 'none';
     
 
-// 
-
-// Flag Modal
-btn = L.easyButton('<i class="fa-regular fa-flag"></i>',function(btn,map){
-    $('#flagModal').modal('show');
-    }).addTo(map);
-    btn.button.style.backgroundColor = 'antiquewhite';
-    btn.button.style.border = 'none';
-  
-
-
-
 // Time Zone Modal Button
 btn = L.easyButton('<i class="fa-regular fa-clock"></i>',function(btn,map){
     $('#timeModal').modal('show');
     }).addTo(map);
     btn.button.style.backgroundColor = 'antiquewhite';
     btn.button.style.border = 'none';
+ 
    
-
-
 // Weather Modal Button
 btn = L.easyButton('<i class="fa-regular fa-sun"></i>',function(btn,map){
     $('#weatherModal').modal('show');
     }).addTo(map);
     btn.button.style.backgroundColor = 'antiquewhite';
     btn.button.style.border = 'none';
-   
 
-
-// Population Modal
+// Population Modal Button
 btn = L.easyButton('<i class="fa-solid fa-person"></i>',function(btn,map){
     $('#populationModal').modal('show');
     }).addTo(map);
@@ -535,10 +602,12 @@ btn = L.easyButton('<i class="fa-solid fa-person"></i>',function(btn,map){
     btn.button.style.border = 'none';
  
 
-
- // Wikipedia Modal
- btn = L.easyButton('<i class="fa-brands fa-wikipedia-w"></i>',function(btn,map){
-    $('#wikipediaModal').modal('show');
+ // News Modal Button
+ btn = L.easyButton('<i class="fa-solid fa-newspaper"></i>',function(btn,map){
+    $('#newsModal').modal('show');
     }).addTo(map);
     btn.button.style.backgroundColor = 'antiquewhite';
     btn.button.style.border = 'none';
+
+
+

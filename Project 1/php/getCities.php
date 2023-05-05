@@ -3,6 +3,7 @@
 	$curl = curl_init();
 
 	curl_setopt_array($curl, [
+		
 		CURLOPT_URL => "https://city-by-api-ninjas.p.rapidapi.com/v1/city?country=" . $_REQUEST['country'] . "&limit=30",
 		CURLOPT_RETURNTRANSFER => true,
 		CURLOPT_FOLLOWLOCATION => true,

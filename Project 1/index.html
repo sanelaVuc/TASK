@@ -1,62 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gazetteer</title>
-    <link rel="icon" type="image/x-icon" href="./libs/icons/favicon.png">
-    <link rel="stylesheet" href="./leaflet/leaflet.css"/> 
-    <link rel="stylesheet" href="./Bootstrap/bootstrap-5.3.0-alpha1-dist/css/bootstrap.css" rel="stylesheet">
-    <link rel="stylesheet" href="./libs/fontawesome/css/all.css">
-    <link rel="stylesheet" href="./libs/Easy-button/easybuttoncss.css">
-    <link rel="stylesheet" href="./leaflet/MarkerCluster.css">
-    <link rel="stylesheet" href="./leaflet/MarkerCluster.Default.css">
-
-
-    <link rel="stylesheet" href="./style.css"> 
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gazetteer</title>
+  <link rel="icon" type="image/x-icon" href="./libs/icons/favicon.png">
+  <link rel="stylesheet" href="./leaflet/leaflet.css"/> 
+  <link rel="stylesheet" href="./Bootstrap/bootstrap-5.3.0-alpha1-dist/css/bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" href="./libs/fontawesome/css/all.css">
+  <link rel="stylesheet" href="./libs/Easy-button/easybuttoncss.css">
+  <link rel="stylesheet" href="./leaflet/leaflet.extra-markers.min.css"></li>
+  <link rel="stylesheet" href="./leaflet/MarkerCluster.css">
+  <link rel="stylesheet" href="./leaflet/MarkerCluster.Default.css">
+  <link rel="stylesheet" href="./style.css">
+ 
+   
 </head>
 
 <body>
-  <!-- NavBar -->
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Gazetteer</a>
-                
-                <div class="col-auto">
-                    <select class="form-select"  name="selectCountry" id="selectCountry" aria-label="Select Country">
-                     </select>     
-                </div> 
-            </div>        
-  </nav>
+  <!-- Loader -->
+  <div class="loader"></div>
+    
 
+  <!-- Select country -->
+  <span id="selectContainer">
+    <select class="form-select shadow-sm"  name="selectCountry" id="selectCountry" aria-label="Select Country"></select>
+  </span>
 
   <!-- Map -->
   <div id="map"></div> 
 
    <!-- Button Country Info modal -->
-  <div class="modal fade" id="countryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="countryModal" id="selectCountry" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
    
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="col-11 modal-title text-center" id="exampleModalLabel">Country Information</h1>
-          <button type="button" class="btn-close float-md-end p-1" data-bs-dismiss="modal" aria-label="Close" style=""></button>
+          <img src="" class="img-responsive center-block d-block mx-auto" id="flag"> 
         </div>
-        <div class="modal-body">
-            <table id="selectCountry" class="table">
-          
+        <div class="modal-body" >
+            
+          <table  class="table table-striped">
                 <tbody>
                   <tr>
                     <th scope="row">
-                      <i class="fa-solid fa-city"></i>
-                      <b>Capital:</b></th>
+                      <i class="fa-solid fa-city"></i></th>
+                    <th>Capital</th>
                     <td id="txtCapital"></td>
                   </tr>
+
+
                   <tr>
                     <th scope="row">
                       <i class="fa-solid fa-language"></i>
-                      <b>Language(s):</b></th>
+                    </th>
+                    <th> Language(s)</th>
                     <td id="txtLanguages">
                       <ul>
                         <li id="listId"></li>
@@ -64,24 +63,37 @@
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row"><b>Area:</b></th>
+                    <th scope="row">
+                      <i class="fa-sharp fa-light fa-chart-area"></i>
+                    </th>
+                    <th>Area</th>
                     <td id="txtArea"></td>
                   </tr>
                   <tr>
-                    <th scope="row"><b>Population:</b></th>
+                    <th scope="row">
+                      <i class="fa-solid fa-people-group"></i>
+                    </th>
+                    <th>Population</th>
                     <td id="txtPopulation"></td>
                   </tr>
                   <tr>
-                    <th scope="row"><b>Continent:</b></th>
+                    <th scope="row">
+                      <i class="fa-sharp fa-light fa-earth-europe"></i>
+                    </th>
+                    <th>Continent</th>
                     <td id="txtContinent"></td>
                   </tr>
                   <tr>
-                    <th scope="row"><b>Currency:</b></th>
+                    <th scope="row">
+                      <i class="fa-solid fa-money-bill-wave"></i>
+                    </th>
+                    <th>Currency</th>
                     <td id="txtCurrency"></td>
                   </tr>
                   
                 </tbody>
               </table>
+              <button type="button" class="btn-close btn-close-black" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
        
       </div>
@@ -89,62 +101,44 @@
   </div>
  
 
-  <!-- Flag Country Modal -->
-  <div class="modal fade" id="flagModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="col-11 modal-title text-center" id="exampleModalLabel">Flag</h1>
-          <button type="button" class="btn-close float-md-end p-1" data-bs-dismiss="modal" aria-label="Close" style=""></button>
-        </div>
-        <div class="modal-body">
-            <img src="" class="img-responsive center-block d-block mx-auto" id="flag">
-        </div>
-        
-      </div>
-    </div>
-  </div>
-
-
-
-  
  <!-- Time Zone Modal -->
   <div class="modal fade" id="timeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header ">
           <h1 class="col-11 modal-title text-center" id="exampleModalLabel">Time Zone</h1>
-          <button type="button" class="btn-close float-md-end p-1" data-bs-dismiss="modal" aria-label="Close" style=""></button>
+          <button type="button" class="btn-close float-md-end p-1" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           
-          <table class="table">
+          <table class="table table-striped">
             <tbody>
               <tr>
                 <th scope="row">
                   <i class="fa-solid fa-calendar-days"></i>
-                  <b>Date: </b>
                 </th>
+                <th>Date</th>
                 <td id="timezone"></td>
               </tr>
               <tr>
-                <th scope="row"><i class="fa-regular fa-clock"></i>
-                  <b>Time: </b>
+                <th scope='row'>
+                  <i class="fa-solid fa-map-location-dot"></i>
                 </th>
-                <td id="time"></td>
+                <th>UTC</th>
+                <td id="utc"></td>
               </tr>
               <tr>
                 <th scope="row">
                   <i class="fa-solid fa-sun"></i>
-                  <b>Sunrise:  </b>
                 </th>
+                <th>Sunrise</th>
                 <td id="sunrise"></td>
               </tr>
               <tr>
                 <th scope="row">
                   <i class="fa-solid fa-moon"></i>
-                  <b>Sunset: </b>
                 </th>
+                <th>Sunset</th>
                 <td id="sunset"></td>
               </tr>
           
@@ -165,115 +159,160 @@
 
 
 <!-- Weather Modal -->
-  <div class="modal fade" id="weatherModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-       
-        <div class="modal-body weather">
-          
-          <button type="button" class="btn-close float-md-end p-1" data-bs-dismiss="modal" aria-label="Close"     style=""></button>
-          <h1 class="col-11 modal-title text-center" id="name"></h1>
-          <div class="pic">
+
+<div class="modal fade" id="weatherModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-info bg-gradient text-black">
+        <h3 class="col-11 modal-title text-center" id="name"></h3>
+        <button type="button" class="btn-close btn-close-black" data-bs-dismiss="modal" aria-label="Close"></button>
+
+      </div> 
+
+      <div class="modal-body weather" >
+
+        <div class="row">
+          <p class="fw-bold fs-5 mt-3">TODAY</p>
+          <div class="col text-center">
             <img src="" id="weatherIcon">
-            <div class="temp">
-              <h4 id="description"></h4>
-              <h1 id="temperature"></h1>
-              
-            </div>
-          
           </div>
 
+          <div class="col text-center">
+            <h6 id="iconText"></h6>
+            <h1 id="maxTemp"></h1>
+            <h5 id="minTemp"></h5>
+          </div>
 
-            <table class="table">
-              <tbody>
-                <th scope="row">
-                  <i class="fa-solid fa-temperature-high"></i>
-                  <b>Feels like:</b></th>
-                <td id="feelsLike"></td>
-              </tr> 
-              <tr>
-                <th scope="row">
-                  <i class="fa-solid fa-temperature-arrow-down"></i>
-                  <b>Minim Temperature:</b></th>
-                <td id="tempMin"> </td>
-              </tr>
-              <tr>
-                <th scope="row">
-                  <i class="fa-solid fa-temperature-arrow-up"></i>
-                  <b>Maxim Temperature:</b></th>
-                <td id="tempMax"></td>
-              </tr>
-              <tr>
-                <th scope="row">
+          <div class="col text-center" id="thirdCol">
+            <div class="row">
+              <div class="col">
+                <div class="col">
                   <i class="fa-solid fa-wind"></i>
-                  <b>Wind Speed:</b></th>
-                <td id="wind"></td>
-              </tr>
-              <th scope="row">
-                <b>Humidity:</b></th>
-              <td id="humidity"></td>
-            </tr>
-             
-            </tbody>
-          </table>
+                  <span class="ms-1" id="wind"></span>
+                </div>
+                <div class="col">
+                  <i class="fa-solid fa-cloud-rain"></i>
+                  <span class="ms-1" id="rain"></span>
+                </div>
+                <div class="col">
+                  <i class="fa-sharp fa-light fa-droplet"></i>
+                  <span class="ms-1" id="humidity"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
-        
+
+        <div class="row text-center">
+          <div class="col border border-dark">
+            <div class="row">
+              <div class="col">
+                <p class="fw-bold fs-5 mt-3" id="day1Date"></p>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <img src="" id="day1Icon">
+              </div>
+
+              <div class="col">
+                <p  class="fw-bold fs-4 mb-0" id="day1TempMax"></p>
+                <p id="day1TempMin"></p>
+              </div>
+            </div>
+
+            
+          </div>
+          <br>
+
+          <div class="col border border-dark">
+            <div class="row">
+              <div class="col">
+                <p class="fw-bold fs-5 mt-3" id="day2Date"></p>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <img src="" id="day2Icon">
+              </div>
+
+              <div class="col">
+                <p  class="fw-bold fs-4 mb-0" id="day2TempMax"></p>
+                <p id="day2TempMin"></p>
+              </div>
+            </div>
+
+            
+          </div>
+        </div>
+
+     
       </div>
-    </div>
   </div>
+</div> 
+</div>
+
+
+
+
+
 
 
 <!-- Population Modal -->
-<div class="modal fade" id="populationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="populationModal" id="selectCountry" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="col-11 modal-title text-center" id="exampleModalLabel">Population</h1>
-        <button type="button" class="btn-close float-md-end p-1" data-bs-dismiss="modal" aria-label="Close" style=""></button>
+        <button type="button" class="btn-close float-md-end p-1" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <table id="selectCountry" class="table">
+        <table class="table table-striped">
           
           <tbody>
             <tr>
-              <th scope="row"><b>1970 Population:</b></th>
+              <th scope="row">1970</th>
               <td id="pop1970"></td>
             </tr>
             <tr>
-              <th scope="row"><b>1980 Population:</b></th>
+              <th scope="row">1980</th>
               <td id="pop1980">
               </td>
             </tr>
             <tr>
-              <th scope="row"><b>1990 Population:</b></th>
+              <th scope="row">1990</th>
               <td id="pop1990"></td>
             </tr>
             <tr>
-              <th scope="row"><b>2000 Population:</b></th>
+              <th scope="row">2000</th>
               <td id="pop2000"></td>
             </tr>
             <tr>
-              <th scope="row"><b>2010 Population:</b></th>
+              <th scope="row">2010</th>
               <td id="pop2010"></td>
             </tr>
             <tr>
-              <th scope="row"><b>2015 Population:</b></th>
+              <th scope="row">2015</th>
               <td id="pop2015"></td>
             </tr>
             <tr>
-              <th scope="row"><b>2020 Population:</b></th>
+              <th scope="row">2020</th>
               <td id="pop2020"></td>
             </tr>
             <tr>
-              <th scope="row"><b>2022 Population:</b></th>
+              <th scope="row">2022</th>
               <td id="pop2022"></td>
             </tr>
             <tr>
-              <th scope="row"><b>Growth Rate:</b></th>
+              <th scope="row">Growth Rate</th>
               <td id="growth"></td>
             </tr>
             <tr>
-              <th scope="row"><b>World Population Percentage:</b></th>
+              <th scope="row">Percentage of World</th>
               <td id="percentage"></td>
             </tr>
 
@@ -286,53 +325,51 @@
   </div>
 </div>
 
-<!-- Wikipedia Modal -->
-<div class="modal fade" id="wikipediaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+
+<!-- News Modal -->
+<div class="modal fade" id="newsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="col-11 modal-title text-center" id="exampleModalLabel">Wikipedia</h1>
-        <button type="button" class="btn-close float-md-end p-1" data-bs-dismiss="modal" aria-label="Close" style=""></button>
+        <h1 class="col-11 modal-title text-center" id="exampleModalLabel">Top News</h1>
+        <button type="button" class="btn-close float-md-end p-1" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <table class="table">
-          
-          <tbody>
-            
-            <tr>
-              <th scope="row">Summary</th>
-            </tr>
-            <tr>
-              <th scope="row"></th>
-              <td id="summary"></td>
-            </tr>
-            <tr>
-              <th scope="row"></th>
-              <td>
-                <a id="wikiLink">Read More</a>
-              </td>
-              
-            </tr>
-            
-            
-
-
-          </tbody>
-        </table>
+        
+        <div class="col  text-center">
+          <p class="fw-bold fs-4 mb-0"  id="title1"></p>
+          <a id="Link1"><i class="fa-solid fa-file-lines"></i></a>
+        </div><br>
+        <div class="col text-center">
+          <p class="fw-bold fs-4 mb-0" id="title2"></p>
+          <a id="Link2"><i class="fa-solid fa-file-lines"></i></a>
+        </div><br>
+        <div class="col  text-center">
+          <p class="fw-bold fs-4 mb-0" id="title3"></p>
+          <a id="Link3"><i class="fa-solid fa-file-lines"></i></a>
+        </div>
+        
+      
+     
       </div>
      
     </div>
   </div>
 </div>
-   
+ 
+
     
     <script type="text/javascript" src="./libs/fontawesome/js/all.min.js"></script>
     <script type="text/javascript" src="./js/jquery-2.2.3.min.js"></script>
     <script type="text/javascript" src="./Bootstrap/bootstrap-5.3.0-alpha1-dist/js/bootstrap.min.js"></script> 
     <script type="text/javascript" src="./leaflet/leaflet.js"></script> 
+    <script type="text/javascript" src="./leaflet/leaflet.extra-markers.min.js"></script>
     <script type="text/javascript" src="./leaflet/leaflet.markercluster-src.js"></script>
     <script type="text/javascript" src="./libs/Easy-button/easybutton.js"></script>
     <script type="text/javascript" src="./js/script.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <script type="text/javascript" src="./js/date.js"></script>
     
 </body>
 </html>
