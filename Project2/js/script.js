@@ -189,18 +189,42 @@ function loadTableData(headTable, bodyTable) {
 };
 
 
-// Update Personnel - button modal
+// Save Personnel - button modal
 $('#savePersonnel').on('click', function() {
+   var lastName = $('#lastName').val();
+   if (lastName == "") {
+      $('#confirm').html('Last name must be filled out!');
+      $('#alertModal').modal('show');
+      return; 
+   }
+
+   var firstName = $('#firstName').val();
+   if (firstName == "") {
+      $('#confirm').html('First name must be filled out!');
+      $('#alertModal').modal('show');
+      return; 
+      }
+
+   var email = $('#email').val();
+   if (email == "") {
+      $('#confirm').html('Email must be filled out!');
+      $('#alertModal').modal('show');
+      return; 
+   }
+
+
+
+
    $.ajax({
       url: "php/updatePersonnelByID.php",
       type: 'POST',
       dataType: 'json',
       data: {
          id: personnelID,
-         firstName: $('#firstName').val(),
-         lastName: $('#lastName').val(),
+         firstName: firstName,
+         lastName: lastName,
          jobTitle: $('#jobTitle').val(),
-         email: $('#email').val(),
+         email: email,
          departmentID: $('#departmentID option:selected').val()
       },
       success: function(resultUpdatePersonnel) {
@@ -249,14 +273,20 @@ $('#deletePersonnel').on('click', function() {
 
 // Save Department - button modal
 $('#saveDepartment').on('click', function() {
-   console.log($('#nameDepartment').val())
+   var name = $('#nameDepartment').val();
+   if (name == "") {
+      $('#confirm').html('Department name must be filled out!');
+      $('#alertModal').modal('show');
+      return; 
+   }
+
    $.ajax({
       url: "php/updateDepartmentByID.php",
       type: 'POST',
       dataType: 'json',
       data: {
          id: departmentID,
-         nameDepartment: $('#nameDepartment').val(),
+         nameDepartment: name,
          locationID: $('#locationID option:selected').val()
       },
       success: function(resultUpdateDepartment) {
@@ -325,14 +355,19 @@ $('#deleteDepartment').on('click', function() {
 
 // Save Location - button modal
 $('#saveLocation').on('click', function() {
-
+   var name = $('#nameLocation').val();
+   if (name == "") {
+      $('#confirm').html('Location name must be filled out!');
+      $('#alertModal').modal('show');
+      return; 
+   }
    $.ajax({
       url: "php/updateLocationByID.php",
       type: 'POST',
       dataType: 'json',
       data: {
          id: locationID,
-         name: $('#nameLocation').val(),
+         name: name,
          
         
          
@@ -436,50 +471,74 @@ $('#deleteLocation').on('click', function() {
 $('#addButton').on('click', function() {
 // Add Personnel Modal 
    if(selectedView == "personnel") {
-      $('#firstNameAdd').val('');
-      $('#lastNameAdd').val('');
-      $('#jobTitleAdd').val('');
-      $('#emailAdd').val('');    
+       
                
       $.ajax({
          url: "php/getAllDepartments.php",
          type: 'POST',
          dataType: 'json',
          success: function(resultDepartments) {
+            $('#firstNameAdd').val('');
+            $('#lastNameAdd').val('');
+            $('#jobTitleAdd').val('');
+            $('#emailAdd').val(''); 
             $('#departmentAdd').empty();
-
+            
             resultDepartments.data.forEach( department => {
                $('#departmentIDAdd').append($('<option>', {
                   value: department.id,
                   text: department.name
+                  
                }))
             }); 
          },
       });
       $('#personnelAddModal').modal('show');
-   
+      
 
-      // Button Add Personnel  
-      $('#CreatePersonnel').on('click', function() {
+      // Button Add Personnel 
+      $('#CreatePersonnel').off('click').on('click', function() {
+         var lastName = $('#lastNameAdd').val();
+         if (lastName == "") {
+           $('#confirm').html('Last name must be filled out!');
+           $('#alertModal').modal('show');
+           return; 
+         }
+
+         var firstName = $('#firstNameAdd').val();
+         if (firstName == "") {
+           $('#confirm').html('First name must be filled out!');
+           $('#alertModal').modal('show');
+           return; 
+         }
+
+         var email = $('#emailAdd').val();
+         if (email == "") {
+           $('#confirm').html('Email must be filled out!');
+           $('#alertModal').modal('show');
+           return; 
+         }
+         
+         
+      
          $.ajax({
             url: "php/insertPersonnel.php",
             type: 'POST',
             dataType: 'json',
             data: {
-               firstName: $('#firstNameAdd').val(),
-               lastName: $('#lastNameAdd').val(),
+               firstName: firstName,
+               lastName: lastName,
                jobTitle: $('#jobTitleAdd').val(),
-               email: $('#emailAdd').val(),
+               email: email,
                departmentID: $('#departmentIDAdd option:selected').val()
             },
             success: function(resultInsertPersonnel) {
-               
                if (resultInsertPersonnel.status.code == 200) {
                   $('#personnelAddModal').modal('hide');
-                  $('#Personnel').trigger('click');      
-               };     
+                  $('#Personnel').trigger('click');
+                  
+               }
             },
-         
          });
       });
    }
@@ -487,13 +546,14 @@ $('#addButton').on('click', function() {
    // Add Department Modal
    if(selectedView == "department") {
       
-      $('#nameDepartmentAdd').val('');
+     
       
       $.ajax({
          url: "php/getAllLocations.php",
          type: 'POST',
          dataType: 'json',
          success: function(resultLocations) {
+            $('#nameDepartmentAdd').val('');
             $('#locationIDAdd').empty();
             resultLocations.data.forEach(location => {
                $('#locationIDAdd').append($('<option>', {
@@ -507,7 +567,14 @@ $('#addButton').on('click', function() {
    
 
       // Button Add Department 
-      $('#CreateDepartment').on('click', function() {
+      $('#CreateDepartment').one('click', function() {
+         var name = $('#nameDepartmentAdd').val();
+         if (name == "") {
+           $('#confirm').html('Department name must be filled out!');
+           $('#alertModal').modal('show');
+           return; 
+         }
+
          $.ajax({
             url: "php/insertDepartment.php",
             type: 'POST',
@@ -536,15 +603,21 @@ $('#addButton').on('click', function() {
       
 
    // Button Add Location
-      $('#CreateLocation').on('click', function() {
-         
+      $('#CreateLocation').off('click').one('click', function() {
+         var name = $('#nameAddLocation').val();
+         if (name == "") {
+           $('#confirm').html('Location name must be filled out!');
+           $('#alertModal').modal('show');
+           return; 
+         }
+         $('#locationAddModal').modal('hide');
          $.ajax({
             url: "php/insertLocation.php",
             type: 'POST',
             dataType: 'json',
             data: {
                
-               name: $('#nameAddLocation').val(),
+               name: name,
             },
             success: function(resultInsertLocation) {
                if (resultInsertLocation.status.code == 200) {
@@ -559,8 +632,6 @@ $('#addButton').on('click', function() {
 });
 
 
-
- 
 
    //  Search Input
 let timer;
