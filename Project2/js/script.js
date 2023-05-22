@@ -312,10 +312,13 @@ $('#deleteDepartment').on('click', function() {
       url: "php/countDepartment.php",
       type: 'POST',
       dataType: 'json',
+      data: {
+         id: departmentID,
+      },
      
       success: function(resultCountDepartment) {
          
-         if(resultCountDepartment.data['COUNT(id)']  == 0) {
+         if(resultCountDepartment.data == 0) {
             
             $.ajax({
                url: "php/deleteDepartmentByID.php",
@@ -393,9 +396,12 @@ $('#deleteLocation').on('click', function() {
       url: "php/countLocation.php",
       type: 'POST',
       dataType: 'json',
+      data: {
+         id: locationID,
+      },
       
       success: function(resultCountLocation) {
-         if(resultCountLocation.data['COUNT(id)']  == 0) {
+         if(resultCountLocation.data == 0) {
             $.ajax({
                url: "php/deleteLocationByID.php",
                type: 'POST',
