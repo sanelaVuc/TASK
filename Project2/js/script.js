@@ -1,6 +1,6 @@
-const headTablePersonnel = ['Last Name', 'Fist Name', 'Job Title', 'Email', 'Departments', 'Location'];
-const headTableDepartments = ['Department', 'Location'];
-const headTableLocations = ['Location']; 
+const headTablePersonnel = ['', 'Name', 'Job Title', 'Email', 'Departments', 'Location'];
+const headTableDepartments = ['', 'Department', 'Location'];
+const headTableLocations = ['', 'Location',]; 
 var selectedView = 'personnel'//department || location
 var personnelID;
 var departmentID;
@@ -19,7 +19,8 @@ $(document).ready(function() {
    }); 
   
 }); 
-   
+
+
 // Personnel Nav Button
 $('#Personnel').on('click', function() {
    selectedView = "personnel";
@@ -68,7 +69,7 @@ function loadTableData(headTable, bodyTable) {
    let row = "<tr>";
    headerTableHTML.append("<tr>");
    headTable.forEach(headItem =>{
-      row += ("<td>" + headItem + "</td>");
+      row += ("<td style='padding-top: 50px;'>" + headItem + "</td>");
    })
    row += "</tr>";
    headerTableHTML.append(row);
@@ -79,11 +80,15 @@ function loadTableData(headTable, bodyTable) {
    bodyTable.forEach( bodyItem => {
       row = "";
       row += "<tr data-toggle='modal' data-id='"+bodyItem['id']+"' data-target='#'>";
-      for (var key in bodyItem) {
-         if(key == "id"){
+      row += "<td><button type='submit' class='btn btn-danger deleteButton' data-id='"+ bodyItem['id'] +"'><i class='fa-regular fa-trash-can'></i></button></td>";
+      if ('lastName' in bodyItem && 'firstName' in bodyItem){
+      row += ("<td>" + bodyItem['lastName'] + " " + bodyItem['firstName'] + "</td>");
+      }
+      for (var key in bodyItem ) {
+         if(key == "id" || key == "lastName" || key == "firstName"){
             continue;
          }
-         row += ("<td>" + bodyItem[key] + "</td>");
+         row += ("<td>" + bodyItem[key] + "</td>");  
       }
       row += "</tr>";
       bodyTableHTML.append(row);
@@ -94,6 +99,7 @@ function loadTableData(headTable, bodyTable) {
   // Modals 
    $(".table-striped").find('tr[data-target]').on('click', function(){
       
+
       // Personel Modal
       if(selectedView == "personnel") {
          personnelID = $(this).data('id');
@@ -184,37 +190,182 @@ function loadTableData(headTable, bodyTable) {
             }
          });
       }
-
    });
+
+
+   // Delete Button
+   $(".table-striped").find('.deleteButton').one('click', function(event) {
+      event.stopPropagation();
+
+      // Delete Personnel
+      if(selectedView == "personnel") {
+         var personnelID = $(this).closest('tr').data('id');
+         $('#areYouSureDeletePersonnelModal').modal('show');
+
+         $('#deletePersonnelBtn').off('click').one('click', function() {
+            $.ajax({
+               url: "php/deletePersonnelByID.php",
+               type: 'POST',
+               dataType: 'json',
+               data: {
+                  id: personnelID,
+                  
+               },
+               success: function(resultDeletePersonnel) {
+                  
+                  if (resultDeletePersonnel.status.code == 200) {
+                     $('#areYouSureDeletePersonnelModal').modal('hide');
+                     $('#Personnel').trigger('click');
+                  
+                  };
+     
+                     
+               },
+               error: function(jqXHR, textStatus, errorThrown) {
+                  error('Error while trying to delete personnel');
+               }
+               
+            });
+         });
+
+
+            
+      
+      }
+      
+      // Delete Department Modal
+      if(selectedView == "department") {
+         // console.log(event)
+         var departmentID = $(this).attr("data-id");   
+         
+               $.ajax({
+                  url: "php/countDepartment.php",
+                  type: 'POST',
+                  dataType: 'json',
+                  data: {
+                     id: departmentID,
+                  },
+               
+                  success: function(resultCountDepartment) {
+                     
+                     if(resultCountDepartment.data.departmentCount == 0) {
+                        $("#areYouSureDeptName").text(resultCountDepartment.data.departmentName);
+                        $('#areYouSureDeleteDepartmentModal').modal('show');
+                        $('#deleteDepartmentBtn').one('click', function() {
+                           $.ajax({
+                              url: "php/deleteDepartmentByID.php",
+                              type: 'POST',
+                              dataType: 'json',
+                              data: {
+                                 id: departmentID,
+                                    
+                              },
+                              success: function(resultDeleteDepartment) {
+                                 
+                                 if (resultDeleteDepartment.status.code == 200) {
+                                    $('#departmentModal').modal('hide');
+                                    $('#areYouSureDeleteDepartmentModal').modal("hide");
+                                    $('#Department').trigger('click');
+                                 };     
+                              },
+                              error: function(jqXHR, textStatus, errorThrown) {
+                              }
+                           });
+                        })
+                     } else {
+                        $("#cantDeleteDeptName").text(resultCountDepartment.data.departmentName);
+                        $("#countDept").text(resultCountDepartment.data.departmentCount);
+                        $('#confirmModalDepartment').modal('show');
+                        $('#departmentModal').modal('hide');
+                     }
+                  },
+                  error: function(jqXHR, textStatus, errorThrown) {
+                              
+                  }
+               });
+      } 
+         
+      
+         // Delete Location Modal
+      if(selectedView == "location") {
+         
+         var locationID = $(this).attr("data-id");
+
+            
+               $.ajax({
+                  url: "php/countLocation.php",
+                  type: 'POST',
+                  dataType: 'json',
+                  data: {
+                     id: locationID,
+                  },
+                  
+                  success: function(resultCountLocation) {
+                     
+                     if(resultCountLocation.data.departmentLocCount == 0) {
+                        $("#areYouSureLocationName").text(resultCountLocation.data.locationName);
+                        $('#areYouSureDeleteLocationModal').modal('show');
+                        $('#deleteLocationBtn').one('click', function() {
+                           $.ajax({
+                              url: "php/deleteLocationByID.php",
+                              type: 'POST',
+                              dataType: 'json',
+                              data: {
+                                    id: locationID,
+                              
+                              },
+                              success: function(resultDeleteLocation) {
+                                 
+                                 if (resultDeleteLocation.status.code == 200) {
+                                    $('#locationModal').modal('hide');
+                                    $('#areYouSureDeleteLocationModal').modal("hide");
+                                    $('#Location').trigger('click');
+                                 };
+                                 
+                                 
+                              },
+                              error: function(jqXHR, textStatus, errorThrown) {
+                              
+                              }
+                           });
+                        })
+                     } else {
+                        $("#cantDeleteLocationName").text(resultCountLocation.data.locationName);
+                        $("#countLoc").text(resultCountLocation.data.departmentLocCount);
+                        $('#confirmModalLocation').modal('show');
+                        $('#locationModal').modal('hide');
+                     }
+            
+                    
+                     
+                     
+                  },
+                  error: function(jqXHR, textStatus, errorThrown) {
+                     
+                  }
+               });
+            
+      }
+      
+   
+        
+   });
+
+  
 };
 
 
-// Save Personnel - button modal
-$('#savePersonnel').on('click', function() {
+
+ 
+// Update Personnel - button modal
+$('#updatePersonnel').on("submit", function(e){
+   e.preventDefault();
    var lastName = $('#lastName').val();
-   if (lastName == "") {
-      $('#confirm').html('Last name must be filled out!');
-      $('#alertModal').modal('show');
-      return; 
-   }
-
    var firstName = $('#firstName').val();
-   if (firstName == "") {
-      $('#confirm').html('First name must be filled out!');
-      $('#alertModal').modal('show');
-      return; 
-      }
-
+   var jobTitle = $('#jobTitle').val();
    var email = $('#email').val();
-   if (email == "") {
-      $('#confirm').html('Email must be filled out!');
-      $('#alertModal').modal('show');
-      return; 
-   }
-
-
-
-
+  
+  
    $.ajax({
       url: "php/updatePersonnelByID.php",
       type: 'POST',
@@ -223,7 +374,7 @@ $('#savePersonnel').on('click', function() {
          id: personnelID,
          firstName: firstName,
          lastName: lastName,
-         jobTitle: $('#jobTitle').val(),
+         jobTitle: jobTitle,
          email: email,
          departmentID: $('#departmentID option:selected').val()
       },
@@ -238,47 +389,26 @@ $('#savePersonnel').on('click', function() {
          error('Error while trying to update personnel');
       }
    });
+  
+})
+
+
+$('#personnelModal').on('shown.bs.modal', function () {
+   $('#lastName').focus();
 });
 
-// Delete Personnel - button modal
-$('#deletePersonnel').on('click', function() {
-   
-   $.ajax({
-      url: "php/deletePersonnelByID.php",
-      type: 'POST',
-      dataType: 'json',
-      data: {
-         id: personnelID,
-         
-      },
-      success: function(resultDeletePersonnel) {
-         if (resultDeletePersonnel.status.code == 200) {
-            // $('#updatePersonnel').val();
-            $('#personnelModal').modal('hide');
-            $('#Personnel').trigger('click');
-         };
-
-          
-            
-            
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-         error('Error while trying to delete personnel');
-      }
-   });
-
-
+$('#personnelModal').on('hidden.bs.modal', function () {
+   $('#updatePersonnel')[0].reset();
 });
 
 
-// Save Department - button modal
-$('#saveDepartment').on('click', function() {
+
+
+// Update Department - button modal
+$('#updateDepartment').on("submit", function(e) {
+   e.preventDefault();
    var name = $('#nameDepartment').val();
-   if (name == "") {
-      $('#confirm').html('Department name must be filled out!');
-      $('#alertModal').modal('show');
-      return; 
-   }
+   
 
    $.ajax({
       url: "php/updateDepartmentByID.php",
@@ -306,64 +436,21 @@ $('#saveDepartment').on('click', function() {
 
 });
 
-// Delete Department - button modal
-$('#deleteDepartment').on('click', function() {
-   $.ajax({
-      url: "php/countDepartment.php",
-      type: 'POST',
-      dataType: 'json',
-      data: {
-         id: departmentID,
-      },
-     
-      success: function(resultCountDepartment) {
-         
-         if(resultCountDepartment.data == 0) {
-            
-            $.ajax({
-               url: "php/deleteDepartmentByID.php",
-               type: 'POST',
-               dataType: 'json',
-               data: {
-                  id: departmentID,
-                     
-               },
-               success: function(resultDeleteDepartment) {
-                  if (resultDeleteDepartment.status.code == 200) {
-                     $('#departmentModal').modal('hide');
-                     $('#Department').trigger('click');
-                  };
-                        
-                        
-               },
-               error: function(jqXHR, textStatus, errorThrown) {
-                       
-               }
-            });
-            
-         } else {
-            $('#confirmModalDepartment').modal('show');
-            $('#departmentModal').modal('hide');
-         }
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-                    
-      }
+ $('#departmentModal').on('shown.bs.modal', function () {
+   $('#nameDepartment').focus();
+ });
 
+ $('#departmentModal').on('hidden.bs.modal', function () {
+   $('#updateDepartment')[0].reset();
+ });
 
-
-   });
-});
 
 
 // Save Location - button modal
-$('#saveLocation').on('click', function() {
+$('#updateLocation').on('submit', function(e) {
+   e.preventDefault();
    var name = $('#nameLocation').val();
-   if (name == "") {
-      $('#confirm').html('Location name must be filled out!');
-      $('#alertModal').modal('show');
-      return; 
-   }
+  
    $.ajax({
       url: "php/updateLocationByID.php",
       type: 'POST',
@@ -390,91 +477,18 @@ $('#saveLocation').on('click', function() {
 
 });
 
-// Delete Location - button modal
-$('#deleteLocation').on('click', function() {
-   $.ajax({
-      url: "php/countLocation.php",
-      type: 'POST',
-      dataType: 'json',
-      data: {
-         id: locationID,
-      },
-      
-      success: function(resultCountLocation) {
-         if(resultCountLocation.data == 0) {
-            $.ajax({
-               url: "php/deleteLocationByID.php",
-               type: 'POST',
-               dataType: 'json',
-               data: {
-                     id: locationID,
-               
-               },
-               success: function(resultDeleteLocation) {
-                  if (resultDeleteLocation.status.code == 200) {
-                     $('#locationModal').modal('hide');
-                     $('#Location').trigger('click');
-                  };
-                  
-                  
-               },
-               error: function(jqXHR, textStatus, errorThrown) {
-                 
-               }
-            });
-         } else {
-            $('#confirmModalLocation').modal('show');
-            $('#locationModal').modal('hide');
-         }
+$('#locationModal').on('shown.bs.modal', function () {
+   $('#nameLocation').focus();
+});
 
-        
-         
-         
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-         
-      }
-   });
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    $.ajax({
-//       url: "php/deleteLocationByID.php",
-//       type: 'POST',
-//       dataType: 'json',
-//       data: {
-//           id: locationID,
-      
-//       },
-//       success: function(resultDeleteLocation) {
-//          if (resultDeleteLocation.status.code == 200) {
-//             $('#locationModal').modal('hide');
-//             $('#Location').trigger('click');
-//         };
-         
-         
-//       },
-//       error: function(jqXHR, textStatus, errorThrown) {
-//         error('Error while trying to delete location');
-//      }
-//   });
-}); 
+$('#locationModal').on('hidden.bs.modal', function () {
+   $('#updateLocation')[0].reset();
+});
 
 
 
 // Add Button
-$('#addButton').on('click', function() {
+$('#addButton').off('click').on('click', function() {
 // Add Personnel Modal 
    if(selectedView == "personnel") {
        
@@ -503,27 +517,12 @@ $('#addButton').on('click', function() {
       
 
       // Button Add Personnel 
-      $('#CreatePersonnel').off('click').on('click', function() {
+      $('#addPersonnelForm').one('submit', function(e) {
+          e.preventDefault();
          var lastName = $('#lastNameAdd').val();
-         if (lastName == "") {
-           $('#confirm').html('Last name must be filled out!');
-           $('#alertModal').modal('show');
-           return; 
-         }
-
          var firstName = $('#firstNameAdd').val();
-         if (firstName == "") {
-           $('#confirm').html('First name must be filled out!');
-           $('#alertModal').modal('show');
-           return; 
-         }
-
          var email = $('#emailAdd').val();
-         if (email == "") {
-           $('#confirm').html('Email must be filled out!');
-           $('#alertModal').modal('show');
-           return; 
-         }
+         var jobTitle = $('#jobTitleAdd').val();
          
          
       
@@ -534,7 +533,7 @@ $('#addButton').on('click', function() {
             data: {
                firstName: firstName,
                lastName: lastName,
-               jobTitle: $('#jobTitleAdd').val(),
+               jobTitle: jobTitle,
                email: email,
                departmentID: $('#departmentIDAdd option:selected').val()
             },
@@ -549,11 +548,19 @@ $('#addButton').on('click', function() {
       });
    }
 
+   $('#personnelAddModal').on('shown.bs.modal', function () {
+      $('#lastNameAdd').focus();
+   });
+
+   $('#personnelAddModal').on('hidden.bs.modal', function () {
+      $('#addPersonnelForm')[0].reset();
+   });
+
    // Add Department Modal
    if(selectedView == "department") {
+         
       
-     
-      
+         
       $.ajax({
          url: "php/getAllLocations.php",
          type: 'POST',
@@ -570,23 +577,20 @@ $('#addButton').on('click', function() {
          },
       });
       $('#departmentAddModal').modal('show');
-   
+
 
       // Button Add Department 
-      $('#CreateDepartment').one('click', function() {
+      $('#addDepartmentForm').one('submit', function(e) {
+         e.preventDefault();
          var name = $('#nameDepartmentAdd').val();
-         if (name == "") {
-           $('#confirm').html('Department name must be filled out!');
-           $('#alertModal').modal('show');
-           return; 
-         }
+         
 
          $.ajax({
             url: "php/insertDepartment.php",
             type: 'POST',
             dataType: 'json',
             data: {
-               name: $('#nameDepartmentAdd').val(),
+               name: name,
                locationID: $('#locationIDAdd option:selected').val()
             },
             success: function(resultInsertDepartment) {
@@ -601,6 +605,18 @@ $('#addButton').on('click', function() {
       });
    }
 
+   $('#departmentAddModal').on('shown.bs.modal', function () {
+      $('#nameDepartmentAdd').focus();
+   });
+
+   $('#departmentAddModal').on('hidden.bs.modal', function () {
+      $('#addDepartmentForm')[0].reset();
+   });
+
+
+
+
+
    // Add Location Modal
    if(selectedView == "location") {
       
@@ -608,15 +624,12 @@ $('#addButton').on('click', function() {
       $('#locationAddModal').modal('show');
       
 
-   // Button Add Location
-      $('#CreateLocation').off('click').one('click', function() {
+      // Button Add Location
+      $('#addLocationForm').one('submit', function(e) {
+         e.preventDefault();
          var name = $('#nameAddLocation').val();
-         if (name == "") {
-           $('#confirm').html('Location name must be filled out!');
-           $('#alertModal').modal('show');
-           return; 
-         }
-         $('#locationAddModal').modal('hide');
+         
+         
          $.ajax({
             url: "php/insertLocation.php",
             type: 'POST',
@@ -627,7 +640,7 @@ $('#addButton').on('click', function() {
             },
             success: function(resultInsertLocation) {
                if (resultInsertLocation.status.code == 200) {
-                  $('#LocationAddModal').modal('hide');
+                  $('#locationAddModal').modal('hide');
                   $('#Location').trigger('click');
                   
             }  
@@ -635,6 +648,14 @@ $('#addButton').on('click', function() {
          });
       });
    }
+   $('#locationAddModal').on('shown.bs.modal', function () {
+      $('#nameAddLocation').focus();
+   });
+
+   $('#locationAddModal').on('hidden.bs.modal', function () {
+      $('#addLocationForm')[0].reset();
+   });
+
 });
 
 
@@ -734,4 +755,10 @@ function topFunction() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
 };
+
+
+
+
+
+
 

@@ -17,29 +17,30 @@
      <!-- Loader -->
     <div class="loader"></div>
 
-    <!-- NavBar -->
-    <div>
-        <nav class="navbar navbar-expand-md sticky-top bg-body-tertiary flex-column">
+    <!-- NavBar original -->
+    <!-- <div>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
             <div class="container-fluid">
+               
                 <div class="d-grid gap-2 d-md-block">
-                    <!-- Button Personnel table -->
+                    Button Personnel table
                     <button id="Personnel" class="btn btn-secondary" type="button">
                         <img src="./icons/people.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top"><br>Personnel
                     </button>
-                    <!-- Button Department table -->
+                    Button Department table
                     <button id="Department" class="btn btn-secondary" type="button">
                         <img src="./icons/networking.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top"><br>Department
                     </button>
-                    <!-- Button Location table -->
+                    Button Location table
                     <button id="Location" class="btn btn-secondary" type="button">
                         <img src="./icons/place.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top"><br>Location
                     </button>
                 </div>
-                <!-- Button Add Modal -->
+                Button Add Modal
                 <div id="addButton">
                     <button class="btn  btn-outline-info me-2" type="button" id="add"><i class="fa-solid fa-folder-plus fa-2xl"></i></button>
                 </div>
-                <!-- Search input -->
+                Search input
                 <form class="d-flex" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="inputSearch">
                        
@@ -51,18 +52,62 @@
         </nav> 
         <br>
         <br>
-    </div>
+    </div> -->
 
-   
+    <!-- NavBar -->
+    <div>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                   
+                    <div class="row">
+                        <div class="col">
+                            <!-- Button Personnel table -->
+                            <button id="Personnel" class="btn btn-secondary" type="button">
+                                <img src="./icons/people.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top"><br>Personnel
+                            </button>
+                        </div>
+                        <div class="col">
+                            <!-- Button Department table -->
+                            <button id="Department" class="btn btn-secondary" type="button">
+                                <img src="./icons/networking.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top"><br>Department
+                            </button>
+                        </div>
+                        <div class="col">
+                            <!-- Button Location table -->
+                            <button id="Location" class="btn btn-secondary" type="button">
+                                <img src="./icons/place.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top"><br>Location
+                            </button>
+                        </div>
+                   </div>
+                    
+                </div>
+                
+            </div>
+
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="inputSearch">
+            </form>
+                
+            <div id="addButton">
+                <button class="btn  btn-outline-info me-3" type="button" id="add"><i class="fa-solid fa-folder-plus fa-2xl"></i></button>
+            </div>
+                   
+        </nav>
+    </div>
+        
 
 
     <!-- Main Table -->
     <div id="table-container">
         <table  id="mainTable" class="table table-hover table-bordered table-striped">
-        <thead id="tableHead" class="table-primary text-center sticky-top">
+        <thead id="tableHead" class="table-primary">
         </thead>
 
-        <tbody id="tableBody" class="table-group-divider text-center"> 
+        <tbody id="tableBody" class="table-group-divider"> 
         </tbody>
         
         </table>
@@ -70,207 +115,244 @@
     
 
     <!--Personnel Modal  -->
-    <div id="personnelModal" class="modal fade"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div id="personnelModal" class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        
+          
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="fa-solid fa-user-pen fa-2xl"></i></h1>
+                <div class="modal-header bg-secondary bg-gradient text-white">
+                    <i class="fa-solid fa-user-pen fa-2xl"></i>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit employee</h1>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    
                 </div>
-                <div class="modal-body">
-
-                    <form class="row g-3" id="updatePersonnel">
-                        <div class="col-md-6">
-                          <label for="lastName" class="form-label">Last Name</label>
-                          <input type="text" class="form-control" id="lastName">
+                
+                <form class="row g-3" id="updatePersonnel">
+                    <div class="modal-body">
+                              
+                        <div class="col-md-12">
+                            <label for="lastName" class="form-label"><b>Last Name</b></label>
+                            <input type="text" class="form-control" id="lastName" required>
                         </div>
-                        <div class="col-md-6">
-                          <label for="firstName" class="form-label">First Name</label>
-                          <input type="text" class="form-control" id="firstName">
+                        <div class="col-md-12">
+                            <label for="firstName" class="form-label"><b>Name</b></label>
+                            <input type="text" class="form-control" id="firstName" required>
                         </div>
                         
                         <div class="col-12">
-                            <label for="jobTitle" class="form-label">Job Title</label>
-                            <input type="text" class="form-control" id="jobTitle">
-                          </div>
+                            <label for="jobTitle" class="form-label"><b>Job Title</b></label>
+                            <input type="text" class="form-control" id="jobTitle" required>
+                        </div>
                         <div class="col-12">
-                          <label for="email" class="form-label">Email</label>
-                          <input type="email" class="form-control" id="email">
+                            <label for="email" class="form-label"><b>Email</b></label>
+                            <input type="email" class="form-control" id="email" required>
                         </div>
                         <div class="col-md-12">
-                          <label for="departmentID" class="form-label">Department</label>
-                          <select id="departmentID" class="form-select">
-                          </select>
+                            <label for="departmentID" class="form-label"><b>Department</b></label>
+                            <select id="departmentID" class="form-select" required>
+                            </select>
                         </div>   
-                    </form>
+                            
 
-                </div>
-                <div class="modal-footer d-flex gap-2 justify-content-between ">
-                    <button type="button" class="btn btn-info" id="savePersonnel">Save changes</button>
-                    <button type="submit" class="btn btn-danger" id="deletePersonnel">Delete</button>
-                </div>
+                    </div>
+                    <div>
+                        <div class="modal-footer d-flex gap-2">
+                            <button type="submit" class="btn btn-info" id="savePersonnel">Save changes</button>
+                        </div>
+                    </div>
+                </form>   
+                
             </div>
         </div>
     </div>
 
 
+    
     <!-- Department Modal -->
-    <div id="departmentModal" class="modal fade"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div id="departmentModal" class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="fa-solid fa-briefcase fa-2xl"></i></h1>
+                <div class="modal-header bg-secondary bg-gradient text-white">
+                    <i class="fa-solid fa-briefcase fa-2xl"></i>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel" >Edit Department</h1>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    
                 </div>
-                <div class="modal-body">
-                    <form class="row g-3" id="updateDepartment">
-                        <div class="col-md-6">
-                            <label for="nameDepartment" class="form-label">Department</label>
-                            <input type="text" class="form-control" id="nameDepartment">
+                <form class="row g-3" id="updateDepartment">
+                    
+                    <div class="modal-body">
+                        
+                            <div class="col-md-12">
+                                <label for="nameDepartment" class="form-label"><b>Department</b></label>
+                                <input type="text" class="form-control" id="nameDepartment" required>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="locationID" class="form-label"><b>Location</b></label>
+                                <select id="locationID" class="form-select">
+                                <option selected></option>
+                                <option></option>
+                                </select>
+                            </div>
+                        
+                    </div>
+                    <div>
+                        <div class="modal-footer d-flex gap-2">
+                            <button type="submit" class="btn btn-info" id="saveDepartment">Save changes</button>
                         </div>
-                        <div class="col-md-12">
-                            <label for="locationID" class="form-label">Location</label>
-                            <select id="locationID" class="form-select">
-                            <option selected></option>
-                            <option></option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer d-flex gap-2 justify-content-between ">
-                    <button type="button" class="btn btn-info" id="saveDepartment">Save changes</button>
-                    <button type="button" class="btn btn-danger" id="deleteDepartment">Delete</button>
-                </div>
-                
+                    </div>
+                </form>    
             </div>
         </div>
     </div>
 
 
     <!--Location Modal  -->
-    <div id="locationModal" class="modal fade"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div id="locationModal" class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="fa-sharp fa-light fa-map-location fa-2xl"></i></h1>
+                <div class="modal-header bg-secondary bg-gradient text-white">
+                    <i class="fa-sharp fa-light fa-map-location fa-2xl"></i>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Location</h1>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    
                 </div>
-                <div class="modal-body">
-                    <form class="row g-3" id="updateLocation">
-                        <div class="col-md-6">
-                        <label for="nameLocation" class="form-label">Location</label>
-                        <input type="text" class="form-control" id="nameLocation">
+                <form class="row g-3" id="updateLocation">
+                    <div>
+                        <div class="modal-body">
+                            
+                                <div class="col-md-12">
+                                    <label for="nameLocation" class="form-label"><b>Location</b></label>
+                                    <input type="text" class="form-control" id="nameLocation" required>
+                                </div>
+                            
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer d-flex gap-2 justify-content-between ">
-                    <button type="button" class="btn btn-info" id="saveLocation">Save changes</button>
-                    <button type="button" class="btn btn-danger" id="deleteLocation">Delete</button>
-                </div>
+                        <div>
+                            <div class="modal-footer d-flex gap-2">
+                                <button type="submit" class="btn btn-info" id="saveLocation">Save changes</button>
+                            
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
   
     <!-- Personnel Add Modal -->
-    <div id="personnelAddModal" class="modal fade"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div id="personnelAddModal" class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-secondary bg-gradient text-white">
                     <i class="fa-solid fa-address-card fa-2xl"></i>
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Add Personnel</h1>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
-                <div class="modal-body">
+                <form class="row g-3" id="addPersonnelForm">
+                   
+                    <div class="modal-body">
 
-                    <form class="row g-3" id="addPersonnelForm">
-                        <div class="col-md-6">
-                          <label for="lastNameAdd" class="form-label">Last Name</label>
-                          <input type="text" class="form-control" id="lastNameAdd">
+                            
+                        <div class="col-md-12">
+                            <label for="lastNameAdd" class="form-label" ><b>Last Name</b></label>
+                            <input type="text" class="form-control" id="lastNameAdd" required>
                         </div>
-                        <div class="col-md-6">
-                          <label for="firstNameAdd" class="form-label">First Name</label>
-                          <input type="text" class="form-control" id="firstNameAdd">
+                        <div class="col-md-12">
+                            <label for="firstNameAdd" class="form-label" ><b>First Name</b></label>
+                            <input type="text" class="form-control" id="firstNameAdd" required>
                         </div>
                         
                         <div class="col-12">
-                            <label for="jobTitleAdd" class="form-label">Job Title</label>
-                            <input type="text" class="form-control" id="jobTitleAdd">
-                          </div>
+                            <label for="jobTitleAdd" class="form-label"><b>Job Title</b></label>
+                            <input type="text" class="form-control" id="jobTitleAdd" required>
+                        </div>
                         <div class="col-12">
-                          <label for="emailAdd" class="form-label">Email</label>
-                          <input type="email" class="form-control" id="emailAdd">
+                            <label for="emailAdd" class="form-label"><b>Email</b></label>
+                            <input type="email" class="form-control" id="emailAdd" required>
                         </div>
                         <div class="col-md-12">
-                          <label for="departmentIDAdd" class="form-label">Department</label>
-                          <select id="departmentIDAdd" class="form-select">
-                          </select>
+                            <label for="departmentIDAdd" class="form-label"><b>Department</b></label>
+                            <select id="departmentIDAdd" class="form-select" required>
+                            </select>
                         </div>   
-                    </form>
+                        
 
-                </div>
-                <div class="modal-footer d-flex gap-2">
-                    <button type="button" class="btn btn-success" id="CreatePersonnel">Add</button>
-                    
-                </div>
+                    </div>
+                    <div>
+                        <div class="modal-footer d-flex gap-2">
+                            <button type="submit" class="btn btn-success" id="CreatePersonnel">Add</button>
+                            
+                        </div>
+                    </div>
+                   
+                </form>
             </div>
         </div>
     </div>
 
 
     <!-- Department Add Modal -->
-    <div id="departmentAddModal" class="modal fade"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div id="departmentAddModal" class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-secondary bg-gradient text-white">
                     <i class="fa-solid fa-folder-plus fa-2xl"></i>
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Add Department</h1>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
-                <div class="modal-body">
-                    <form class="row g-3" id="addDepartmentForm">
+                <form class="row g-3" id="addDepartmentForm">
+                    
+                    <div class="modal-body">
+                            
                         <div class="col-md-6">
-                            <label for="nameDepartmentAdd" class="form-label">Department</label>
-                            <input type="text" class="form-control" id="nameDepartmentAdd">
+                            <label for="nameDepartmentAdd" class="form-label"><b>Department</b></label>
+                            <input type="text" class="form-control" id="nameDepartmentAdd" required>
                         </div>
                         <div class="col-md-12">
-                            <label for="locationIDAdd" class="form-label">Location</label>
+                            <label for="locationIDAdd" class="form-label"><b>Location</b></label>
                             <select id="locationIDAdd" class="form-select">
                             <option selected></option>
                             <option></option>
                             </select>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer d-flex gap-2 justify-content-between ">
-                    <button type="button" class="btn btn-success" id="CreateDepartment">Add</button>   
-                </div>
-                
+                            
+                    </div>
+                    <div>
+                        <div class="modal-footer d-flex gap-2">
+                            <button type="submit" class="btn btn-success" id="CreateDepartment">Add</button>   
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
     <!--Add Location Modal  -->
-    <div id="locationAddModal" class="modal fade"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div id="locationAddModal" class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-secondary bg-gradient text-white">
                     <i class="fa-sharp fa-light fa-map-location fa-2xl"></i>
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Add Location</h1>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
-                <div class="modal-body">
-                    <form class="row g-3" id="addLocationForm">
+                <form class="row g-3" id="addLocationForm">
+                    <div class="modal-body">
+                        
                         <div class="col-md-6">
-                        <label for="nameAddLocation" class="form-label">Location</label>
-                        <input type="text" class="form-control" id="nameAddLocation">
+                            <label for="nameAddLocation" class="form-label"><b>Location</b></label>
+                            <input type="text" class="form-control" id="nameAddLocation" required>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer d-flex gap-2 justify-content-between ">
-                    <button type="button" class="btn btn-success" id="CreateLocation">Add</button>
-                    
-                </div>
+                        
+                    </div>
+                    <div>
+                        <div class="modal-footer d-flex gap-2">
+                            <button type="submit" class="btn btn-success" id="CreateLocation">Add</button>  
+                        </div>
+                    </div>
+                </form>    
             </div>
         </div>
     </div>
@@ -289,7 +371,30 @@
     </div>
 
     
+    <!-- Modal Alert Delete Personnel -->
+    <div id="areYouSureDeletePersonnelModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content shadow">
+            <div class="modal-header bg-warning">
+              <h5 class="modal-title">Remove Personnel?</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
       
+              Are you sure that you want to delete?
+      
+            </div>
+      
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" id="deletePersonnelBtn">Yes</button>
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+            </div>
+            
+          </div>
+          
+        </div>
+        
+    </div>    
 
 
     <!-- Modal Unable Delete Department -->
@@ -301,13 +406,41 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <h6>The department you are trying to delete currently has employees asigned to it. To delete, remove all employees from department and try again.</h6>
-            
+                You cannot remove the entry for <span id="cantDeleteDeptName" class="fw-bold"></span> because it has <span id="countDept" class="fw-bold"></span> employees assigned to it.
+
+                <!-- <h6>The department you are trying to delete currently has employees asigned to it. To delete, remove all employees from department and try again.</h6> -->
             </div>
-            
         </div>
         </div>
     </div>
+
+    <!-- Modal Alert Delete Department -->
+    <div id="areYouSureDeleteDepartmentModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content shadow">
+            <div class="modal-header  bg-warning">
+              <h5 class="modal-title">Remove department?</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+      
+              Are you sure that you want to remove the entry for <span id="areYouSureDeptName" class="fw-bold"></span>?
+      
+            </div>
+      
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-danger myBtn" data-bs-dismiss="modal" id="deleteDepartmentBtn">Yes</button>
+              <button type="button" class="btn btn-outline-secondary myBtn" data-bs-dismiss="modal">No</button>
+            </div>
+            
+          </div>
+          
+        </div>
+        
+    </div>
+
+
+
 
     <!-- Modal Unable Delete Location -->
     <div class="modal fade" id="confirmModalLocation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -318,7 +451,12 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <h6>The location you are trying to delete currently has departments asigned to it. To delete, remove all departments from location and try again.</h6>
+
+                You cannot remove the entry for <span id="cantDeleteLocationName" class="fw-bold"></span> because it has <span id="countLoc" class="fw-bold"></span> department(s) assigned to it.
+
+
+
+                <!-- <h6>The location you are trying to delete currently has departments asigned to it. To delete, remove all departments from location and try again.</h6> -->
               
             </div>
             
@@ -326,10 +464,40 @@
         </div>
       </div>
 
+
+
+    <!-- Modal Alert Delete Location -->
+    <div id="areYouSureDeleteLocationModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content shadow">
+            <div class="modal-header bg-warning">
+              <h5 class="modal-title">Remove Location?</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+      
+              Are you sure that you want to remove the entry for <span id="areYouSureLocationName" class="fw-bold"></span>?
+      
+            </div>
+      
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-danger myBtn" data-bs-dismiss="modal" id="deleteLocationBtn">Yes</button>
+              <button type="button" class="btn btn-outline-secondary myBtn" data-bs-dismiss="modal">No</button>
+            </div>
+            
+          </div>
+          
+        </div>
+        
+    </div>
+
   
 
     <!-- Scroll button -->
     <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa-solid fa-up-long"></i></button>
+  
+
+
 
 
 
