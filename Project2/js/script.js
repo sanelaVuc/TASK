@@ -82,7 +82,7 @@ function loadTableData(headTable, bodyTable) {
       row += "<tr data-toggle='modal' data-id='"+bodyItem['id']+"' data-target='#'>";
       row += "<td><button type='submit' class='btn btn-danger deleteButton' data-id='"+ bodyItem['id'] +"'><i class='fa-regular fa-trash-can'></i></button></td>";
       if ('lastName' in bodyItem && 'firstName' in bodyItem){
-      row += ("<td>" + bodyItem['lastName'] + " " + bodyItem['firstName'] + "</td>");
+      row += ("<td>" + bodyItem['lastName'] + ", " + bodyItem['firstName'] + "</td>");
       }
       for (var key in bodyItem ) {
          if(key == "id" || key == "lastName" || key == "firstName"){
@@ -733,31 +733,23 @@ $('#inputSearch').keyup(function() {
 
 
 
-
-
-
-
-
-
 // Scroll button
-let mybutton = document.getElementById("myBtn");
-window.onscroll = function() {scrollFunction()};
+var btn = $('#returnTopButton');
 
-function scrollFunction() {
-  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-    mybutton.style.display = "block";
+$(window).scroll(function() {
+  if ($(window).scrollTop() > 300) {
+    btn.addClass('show');
   } else {
-    mybutton.style.display = "none";
+    btn.removeClass('show');
   }
-};
+});
 
-function topFunction() {
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-};
+btn.on('click', function(e) {
+  e.preventDefault();
+  $('html, body').animate({scrollTop:0}, '300');
+});
 
-
-
+ 
 
 
 

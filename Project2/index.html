@@ -17,42 +17,7 @@
      <!-- Loader -->
     <div class="loader"></div>
 
-    <!-- NavBar original -->
-    <!-- <div>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
-            <div class="container-fluid">
-               
-                <div class="d-grid gap-2 d-md-block">
-                    Button Personnel table
-                    <button id="Personnel" class="btn btn-secondary" type="button">
-                        <img src="./icons/people.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top"><br>Personnel
-                    </button>
-                    Button Department table
-                    <button id="Department" class="btn btn-secondary" type="button">
-                        <img src="./icons/networking.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top"><br>Department
-                    </button>
-                    Button Location table
-                    <button id="Location" class="btn btn-secondary" type="button">
-                        <img src="./icons/place.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top"><br>Location
-                    </button>
-                </div>
-                Button Add Modal
-                <div id="addButton">
-                    <button class="btn  btn-outline-info me-2" type="button" id="add"><i class="fa-solid fa-folder-plus fa-2xl"></i></button>
-                </div>
-                Search input
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="inputSearch">
-                       
-                </form>
 
-                
-            </div>
-            
-        </nav> 
-        <br>
-        <br>
-    </div> -->
 
     <!-- NavBar -->
     <div>
@@ -157,7 +122,7 @@
                     </div>
                     <div>
                         <div class="modal-footer d-flex gap-2">
-                            <button type="submit" class="btn btn-info" id="savePersonnel">Save changes</button>
+                            <button type="submit" class="btn btn-info">Save changes</button>
                         </div>
                     </div>
                 </form>   
@@ -198,7 +163,7 @@
                     </div>
                     <div>
                         <div class="modal-footer d-flex gap-2">
-                            <button type="submit" class="btn btn-info" id="saveDepartment">Save changes</button>
+                            <button type="submit" class="btn btn-info">Save changes</button>
                         </div>
                     </div>
                 </form>    
@@ -230,7 +195,7 @@
                         </div>
                         <div>
                             <div class="modal-footer d-flex gap-2">
-                                <button type="submit" class="btn btn-info" id="saveLocation">Save changes</button>
+                                <button type="submit" class="btn btn-info">Save changes</button>
                             
                             </div>
                         </div>
@@ -282,7 +247,7 @@
                     </div>
                     <div>
                         <div class="modal-footer d-flex gap-2">
-                            <button type="submit" class="btn btn-success" id="CreatePersonnel">Add</button>
+                            <button type="submit" class="btn btn-success">Add</button>
                             
                         </div>
                     </div>
@@ -321,7 +286,7 @@
                     </div>
                     <div>
                         <div class="modal-footer d-flex gap-2">
-                            <button type="submit" class="btn btn-success" id="CreateDepartment">Add</button>   
+                            <button type="submit" class="btn btn-success">Add</button>   
                         </div>
                     </div>
                 </form>
@@ -349,7 +314,7 @@
                     </div>
                     <div>
                         <div class="modal-footer d-flex gap-2">
-                            <button type="submit" class="btn btn-success" id="CreateLocation">Add</button>  
+                            <button type="submit" class="btn btn-success">Add</button>  
                         </div>
                     </div>
                 </form>    
@@ -408,7 +373,7 @@
             <div class="modal-body">
                 You cannot remove the entry for <span id="cantDeleteDeptName" class="fw-bold"></span> because it has <span id="countDept" class="fw-bold"></span> employees assigned to it.
 
-                <!-- <h6>The department you are trying to delete currently has employees asigned to it. To delete, remove all employees from department and try again.</h6> -->
+                
             </div>
         </div>
         </div>
@@ -454,9 +419,6 @@
 
                 You cannot remove the entry for <span id="cantDeleteLocationName" class="fw-bold"></span> because it has <span id="countLoc" class="fw-bold"></span> department(s) assigned to it.
 
-
-
-                <!-- <h6>The location you are trying to delete currently has departments asigned to it. To delete, remove all departments from location and try again.</h6> -->
               
             </div>
             
@@ -494,7 +456,9 @@
   
 
     <!-- Scroll button -->
-    <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa-solid fa-up-long"></i></button>
+    <div id="returnTopButton" class="bg-warning text-white shadow">
+        <i class="fa-solid fa-up-long"></i>
+    </div>
   
 
 
